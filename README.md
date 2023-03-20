@@ -13,6 +13,7 @@ Role Variables
 
 **jenkins_agent_1_secret** - secret for connecting to main cluster for agent 1
 **jenkins_agent_2_secret** - secret for connecting to main cluster for agent 2
+**jenkins_archive_password** - password from tarball
 
 Dependencies
 ------------
