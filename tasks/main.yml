@@ -16,9 +16,54 @@
       cd "{{ Jenkins_Docker_root }}" && \
       curl -L -o home.tar.gz.gpg \ 
       "https://github.com/Morshimus/SkillFactory-B11-Project-CI-Role-CI-Jenkins-Cluster/releases/download/1.0.0/home.tar.gz.gpg" &&
-      gpg --passphrase "{{  }}" -d home.tar.gz.gpg | tar -xvzf -
+      gpg --passphrase "{{ jenkins_archive_password }}" -d home.tar.gz.gpg | tar -xvzf -
   args:
     executable: /bin/bash
 
+- name: Configure secrets for Jenkins agent 1
+  template:
+    src: .agent_1_secret.j2
+    dest: "{{ Jenkins_Docker_root }}/.agent_1_secret"
+    backup: yes
+    mode: '0600'
+    
+
+- name: Configure secrets for Jenkins agent 2
+  template:
+    src: .agent_2_secret.j2
+    dest: "{{ Jenkins_Docker_root }}/.agent_2_secret"
+    backup: yes
+    mode: '0600'
+
+- name: Copy static file docker-compose.yml to jenkins docker root
+  copy:
+    src: docker-compose.yml
+    dest: "{{ Jenkins_Docker_root }}"
+
+- name: Copy static file provision.yaml to jenkins agents share
+  copy:
+    src: provision.yaml
+    dest: "{{ Jenkins_Docker_root }}/agents_share"
+    
+- name: Copy static file django.conf to jenkins agents share
+  copy:
+    src: django.conf
+    dest: "{{ Jenkins_Docker_root }}/agents_share"
+
+- name: Copy static file requirements.yml to jenkins agents share
+  copy:
+    src: requirements.yml
+    dest: "{{ Jenkins_Docker_root }}/agents_share"
     
   
+- name: Configure service for Jenkins docker-compose
+  template:
+    src: jenkins-cluster.service.j2
+    dest: /etc/systemd/system/jenkins-cluster.service
+    backup: yes
+    mode: '0600'
+
+- name: Start Jenkins service
+  service:
+    name: jenkins-cluster
+    state: started
