@@ -2,7 +2,7 @@
 **/.terraform/*
 **/files/home/*
 **/files/agents_share/*
-
+**/files/.agent_*
 # .tfstate files
 *.tfstate
 *.tfstate.*

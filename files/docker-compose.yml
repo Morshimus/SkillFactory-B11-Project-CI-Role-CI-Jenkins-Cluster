@@ -2,6 +2,11 @@ version: '3.8'
 
 name: morsh_ci
 
+secrets:
+ agent-1-secret:
+  file: .agent_1_secret
+ agent-2-secret:
+  file: .agent_2_secret
 
 x-agent-image: &Agent_Image "${DOCKER_IMG_agent:-morsh92/jenkins-agent-dind:alpine}" 
 x-agent-user: &Agent_User "${DOCKER_USER_agent:-root}"
@@ -12,16 +17,19 @@ x-agent-1-mem: &Agent_1_MEM "${DOCKER_agent_1_MEMORY:-512MB}"
 x-agent-2-cpu: &Agent_2_CPU "${DOCKER_agent_2_CPUS:-1}"
 x-agent-2-mem: &Agent_2_MEM "${DOCKER_agent_2_MEMORY:-512MB}"
 x-agent-1-env: &Agent_1_ENV
-  - JENKINS_SECRET=863a125ab2372dd6cdc00736925d254873cd986a0282422344e23d9de26756b0
+  - JENKINS_SECRET_FILE=/run/secrets/agent-1-secret
   - JENKINS_URL=http://master:8080
   - JENKINS_AGENT_NAME=agent-1
   - JENKINS_AGENT_WORKDIR=/home/jenkins
 x-agent-2-env: &Agent_2_ENV
-  - JENKINS_SECRET=aacde6525e87b530d3616be758cc7df4c46b3b53ee76c7b8e663ebe9db1ab8ba
+  - JENKINS_SECRET_FILE=/run/secrets/agent-2-secret
   - JENKINS_URL=http://master:8080
   - JENKINS_AGENT_NAME=agent-2
   - JENKINS_AGENT_WORKDIR=/home/jenkins
-
+x-agent-1-secrets: &Agent_1_Secret
+  - agent-1-secret
+x-agent-2-secrets: &Agent_2_Secret
+  - agent-2-secret
 
 x-logging: &logging
  driver: "json-file"
@@ -85,6 +93,7 @@ services:
     - net.ipv4.conf.all.secure_redirects=0
     - net.ipv4.conf.all.send_redirects=0
    environment: *Agent_1_ENV
+   secrets: *Agent_1_Secret
    networks: 
     frontend:
     backend:
@@ -112,6 +121,7 @@ services:
     - net.ipv4.conf.all.secure_redirects=0
     - net.ipv4.conf.all.send_redirects=0 
   environment: *Agent_2_ENV
+  secrets: *Agent_2_Secret
   networks:
     frontend:
     backend:

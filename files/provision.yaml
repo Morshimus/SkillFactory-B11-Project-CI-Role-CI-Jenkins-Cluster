@@ -51,8 +51,20 @@
    - name: Configure Postgresql listen address for docker containers
      lineinfile: dest=/opt/pg_data/postgresql.conf regexp="^#listen_addresses = 'localhost'         \# what IP address(es) to listen on;" line="listen_addresses = '172.17.0.1'" 
 
+   - name: Check that the PostgreSQL runing or not
+     stat:
+       path: /run/postgresql/.s.PGSQL.5432
+     register: pg_run_result
+
    - name: Start Postgresql
+     command: sudo -u postgres /usr/bin/pg_ctl start -D /opt/pg_data/ -s -w -t 15
+     when: 
+       - not pg_run_result.stat.exists
+
+   - name: Restart Postgresql
      command: sudo -u postgres /usr/bin/pg_ctl restart -D /opt/pg_data/ -s -w -t 15
+     when: 
+       - pg_run_result.stat.exists
 
    - name: Prepare db for django test
      shell: |

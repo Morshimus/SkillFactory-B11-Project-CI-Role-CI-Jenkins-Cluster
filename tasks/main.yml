@@ -1,2 +1,24 @@
 ---
-# tasks file for Jenkins
+- name: Create root folder required  for Jenkins Docker farm
+  file:
+    path: "{{ Jenkins_Docker_root }}"
+    state: directory
+    mode: '0755'
+
+- name: Create agents shared folder required  for Jenkins Docker farm
+  file:
+    path: "{{ Jenkins_Docker_root }}/agents_share"
+    state: directory
+    mode: '0755'
+
+- name: Download Jenkins home archive and extract .
+  shell: |
+      cd "{{ Jenkins_Docker_root }}" && \
+      curl -L -o home.tar.gz.gpg \ 
+      "https://github.com/Morshimus/SkillFactory-B11-Project-CI-Role-CI-Jenkins-Cluster/releases/download/1.0.0/home.tar.gz.gpg" &&
+      gpg --passphrase "{{  }}" -d home.tar.gz.gpg | tar -xvzf -
+  args:
+    executable: /bin/bash
+
+    
+  
