@@ -5,6 +5,8 @@ name: morsh_ci
 
 x-agent-image: &Agent_Image "${DOCKER_IMG_agent:-morsh92/jenkins-agent-dind:alpine}" 
 x-agent-user: &Agent_User "${DOCKER_USER_agent:-root}"
+x-agent-volumes: &Agent_Volumes
+  - ./agents_share:/tmp:rw
 x-agent-1-cpu: &Agent_1_CPU "${DOCKER_agent_1_CPUS:-1}"
 x-agent-1-mem: &Agent_1_MEM "${DOCKER_agent_1_MEMORY:-512MB}"
 x-agent-2-cpu: &Agent_2_CPU "${DOCKER_agent_2_CPUS:-1}"
@@ -88,6 +90,7 @@ services:
     backend:
       aliases:
          - slave-1
+   volumes: *Agent_Volumes
    logging: *logging
 
  jenkins-agent-2:
@@ -114,6 +117,7 @@ services:
     backend:
       aliases:
          - slave-2
+  volumes: *Agent_Volumes
   logging: *logging
   
 
