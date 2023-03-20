@@ -1,7 +1,5 @@
 version: '3.8'
 
-name: morsh_ci
-
 secrets:
  agent-1-secret:
   file: .agent_1_secret
