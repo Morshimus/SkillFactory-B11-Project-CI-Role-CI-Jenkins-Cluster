@@ -1,4 +1,5 @@
 # Local .terraform directories
+**/docker/*
 **/.terraform/*
 **/files/home/*
 **/files/agents_share/*

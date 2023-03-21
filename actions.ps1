@@ -130,7 +130,7 @@ function molecule {
      docker exec -ti molecule-$role  /bin/sh -c  "molecule init role $org.$role -d docker"
      }
      
-     try{. $path/$role/required_roles.ps1}catch{"There is no required_roles.ps1 file!"}
+     try{. $path/required_roles.ps1}catch{"There is no required_roles.ps1 file!"}
      
      try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/tasks/* $path/molecule/$role/tasks}catch{write-host -f magenta "There is no folder tasks!"}
 
