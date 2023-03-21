@@ -16,7 +16,7 @@
       cd "{{ Jenkins_Docker_root }}" && \
       curl -L -o home.tar.gz.gpg \ 
       "https://github.com/Morshimus/SkillFactory-B11-Project-CI-Role-CI-Jenkins-Cluster/releases/download/1.0.0/home.tar.gz.gpg" &&
-      gpg --passphrase "{{ jenkins_archive_password }}" -d home.tar.gz.gpg | tar -xvzf -
+      gpg --pinentry-mode loopback --passphrase "{{ jenkins_archive_password }}" -d home.tar.gz.gpg | tar -xvzf -
   args:
     executable: /bin/bash
 
