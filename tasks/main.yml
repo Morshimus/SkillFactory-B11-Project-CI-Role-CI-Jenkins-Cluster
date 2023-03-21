@@ -66,4 +66,5 @@
 - name: Start Jenkins service
   service:
     name: jenkins-cluster
+    enabled: true
     state: started
