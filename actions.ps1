@@ -132,27 +132,27 @@ function molecule {
      
      try{. $path/$role/required_roles.ps1}catch{"There is no required_roles.ps1 file!"}
      
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/tasks/* $path/molecule/$role/tasks}catch{write-host -f magenta "There is no folder tasks!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/tasks/* $path/molecule/$role/tasks}catch{write-host -f magenta "There is no folder tasks!"}
 
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/handlers/* $path/molecule/$role/handlers}catch{write-host -f magenta "There is no folder handlers!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/handlers/* $path/molecule/$role/handlers}catch{write-host -f magenta "There is no folder handlers!"}
 
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/templates/* $path/molecule/$role/templates}catch{write-host -f magenta "There is no folder templates!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/templates/* $path/molecule/$role/templates}catch{write-host -f magenta "There is no folder templates!"}
 
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/files/* $path/molecule/$role/files}catch{write-host -f magenta "There is no folder files!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/files/* $path/molecule/$role/files}catch{write-host -f magenta "There is no folder files!"}
 
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/tests/* $path/molecule/$role/tests}catch{write-host -f magenta "There is no folder tests!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/tests/* $path/molecule/$role/tests}catch{write-host -f magenta "There is no folder tests!"}
 
-     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/$role/vars/* $path/molecule/$role/vars}catch{write-host -f magenta "There is no folder vars!"}
+     try{Copy-Item -ErrorAction Stop -Recurse -Force  $path/vars/* $path/molecule/$role/vars}catch{write-host -f magenta "There is no folder vars!"}
 
-     try{Copy-Item  -ErrorAction Stop -Recurse -Force  $path/$role/defaults/* $path/molecule/$role/defaults}catch{write-host -f magenta "There is no folder defaults!"}
+     try{Copy-Item  -ErrorAction Stop -Recurse -Force  $path/defaults/* $path/molecule/$role/defaults}catch{write-host -f magenta "There is no folder defaults!"}
 
      # try{Copy-Item  -ErrorAction Stop -Recurse -Force  $path/$role/meta/* $path/molecule/$role/meta}catch{write-host -f magenta "There is no folder meta!"}
       
      try{$rolereq | ForEach-Object {Copy-Item  -ErrorAction Stop -Recurse -Force  $path/$_ $path/molecule/$role/molecule/default/roles/$_ }}catch{write-host -f magenta "There is no such role folder in Project!"}
 
-     try{Copy-Item   -ErrorAction Stop -Force  $path/$role/verify.yml $path/molecule/$role/molecule/default/verify.yml  }catch{write-host -f magenta "There is no file verify.yml!"}
+     try{Copy-Item   -ErrorAction Stop -Force  $path/verify.yml $path/molecule/$role/molecule/default/verify.yml  }catch{write-host -f magenta "There is no file verify.yml!"}
     
-     try{Copy-Item  -ErrorAction Stop -Force  $path/$role/molecule.yml $path/molecule/$role/molecule/default/molecule.yml}catch{write-host -f magenta "There is no file molecule.yml!"}
+     try{Copy-Item  -ErrorAction Stop -Force  $path/molecule.yml $path/molecule/$role/molecule/default/molecule.yml}catch{write-host -f magenta "There is no file molecule.yml!"}
 
      docker inspect molecule-$role | Out-Null; if($?){
      docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule converge"
@@ -165,7 +165,7 @@ function molecule {
      if($verify){
      if(!(Test-Path $path/molecule/$role/tests)){mkdir -p $path/molecule/$role/tests}
 
-     Copy-Item -Recurse -Force $path/ansible_tests/* $path/molecule/$role/tests
+     Copy-Item -Recurse -Force $path/tests/* $path/molecule/$role/tests
     
      docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule verify"
      
