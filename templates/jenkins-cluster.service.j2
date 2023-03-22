@@ -12,7 +12,7 @@ WorkingDirectory={{ Jenkins_Docker_root }}
 ExecStart=/bin/docker-compose -f docker-compose.yml up
 
 # Compose down, remove containers
-ExecStop=/bin/docker-compose -f docker-compose.yml down
+ExecStop=/bin/docker-compose -f docker-compose.yml down --volumes
 
 [Install]
 WantedBy=multi-user.target

@@ -1,5 +1,12 @@
 version: '3.8'
 
+
+volumes:
+  jenkins_agent_1_store:
+    name: var_folder_1
+  jenkins_agent_2_store:
+    name: var_folder_2  
+
 secrets:
  agent-1-secret:
   file: .agent_1_secret
@@ -8,8 +15,12 @@ secrets:
 
 x-agent-image: &Agent_Image "${DOCKER_IMG_agent:-morsh92/jenkins-agent-dind:alpine}" 
 x-agent-user: &Agent_User "${DOCKER_USER_agent:-root}"
-x-agent-volumes: &Agent_Volumes
+x-agent-1-volumes: &Agent_1_Volumes
   - ./agents_share:/tmp:rw
+  - jenkins_agent_1_store:/var:rw
+x-agent-2-volumes: &Agent_2_Volumes
+  - ./agents_share:/tmp:rw
+  - jenkins_agent_2_store:/var:rw
 x-agent-1-cpu: &Agent_1_CPU "${DOCKER_agent_1_CPUS:-1}"
 x-agent-1-mem: &Agent_1_MEM "${DOCKER_agent_1_MEMORY:-512MB}"
 x-agent-2-cpu: &Agent_2_CPU "${DOCKER_agent_2_CPUS:-1}"
@@ -97,7 +108,7 @@ services:
     backend:
       aliases:
          - slave-1
-   volumes: *Agent_Volumes
+   volumes: *Agent_1_Volumes
    logging: *logging
 
  jenkins-agent-2:
@@ -125,7 +136,7 @@ services:
     backend:
       aliases:
          - slave-2
-  volumes: *Agent_Volumes
+  volumes: *Agent_2_Volumes
   logging: *logging
   
 
